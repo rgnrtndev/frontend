@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white text-black font-sans antialiased">
     <!-- Title Section -->
-    <section class="pt-20 pb-4 px-4 bg-gray-50" id="info-section" ref="infoSection">
+    <section class="pt-10 pb-10 px-4 bg-gray-50" id="info-section" ref="infoSection">
       <h2
         class="text-3xl text-center font-bold text-gray opacity-0 transition-opacity duration-2000 ease-in-out delay-500"
         ref="title">
@@ -51,10 +51,6 @@
         </div>
       </div>
     </section>
-
-
-
-
   </div>
 </template>
 
@@ -113,11 +109,17 @@ export default defineComponent({
       }))
     );
 
-
     const cardsContainer = ref<HTMLElement | null>(null);
     const cards = ref<NodeListOf<HTMLElement> | null>(null);
     const lastScroll = ref(0);
     const viewportHeight = ref(window.innerHeight);
+
+    const infoSection = ref<HTMLElement | null>(null);
+    const title = ref<HTMLElement | null>(null);
+    const description = ref<HTMLElement | null>(null);
+
+    // Track button visibility based on scroll position
+    const showMoreButton = ref(false);
 
 
     // Scroll animation logic
@@ -142,16 +144,14 @@ export default defineComponent({
 
       if (currentScroll > lastScroll.value) {
         animateCards();
+        showMoreButton.value = true;
       } else if (currentScroll < lastScroll.value) {
         animateCards();
+        showMoreButton.value = false;
       }
 
       lastScroll.value = currentScroll;
     };
-
-    const infoSection = ref<HTMLElement | null>(null);
-    const title = ref<HTMLElement | null>(null);
-    const description = ref<HTMLElement | null>(null);
 
     onMounted(() => {
       // Initialize cards and scroll event
@@ -169,7 +169,7 @@ export default defineComponent({
             description.value?.classList.remove('opacity-100', 'text-gray');
           }
         });
-      }, { threshold: 0.1 });
+      }, { threshold: 0.5 });
 
       if (infoSection.value) {
         observer.observe(infoSection.value);
@@ -187,6 +187,7 @@ export default defineComponent({
       title,
       description,
       cardsContainer,
+      showMoreButton,
     };
   },
 });
@@ -224,5 +225,27 @@ export default defineComponent({
 
 .card.slide-out {
   animation: slideOutToLeft 1s ease-out forwards;
+}
+
+/* Custom transitions for the "Show More" button */
+#show-more-btn {
+  transition: all 0.5s ease-in-out;
+}
+
+/* Specific visibility and transform classes for Show More button */
+#show-more-btn.opacity-0 {
+  opacity: 0;
+}
+
+#show-more-btn.opacity-100 {
+  opacity: 1;
+}
+
+#show-more-btn.translate-x-full {
+  transform: translateX(100%);
+}
+
+#show-more-btn.translate-x-0 {
+  transform: translateX(0);
 }
 </style>

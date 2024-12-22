@@ -4,7 +4,7 @@
     <div class="flex justify-between lg:justify-center items-center">
       <!-- Logo -->
       <div class="text-xl font-bold lg:mr-8">
-        <a href="#" class="hover:text-gray-600 transition-colors duration-200">LOGOHERE</a>
+        <a href="#" class="hover:text-gray-600 transition-colors duration-200">RGNRTN</a>
       </div>
 
       <!-- Mobile Menu Button -->
