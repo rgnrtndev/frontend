@@ -95,7 +95,7 @@ onMounted(() => {
 <template>
   <div class="bg-white text-black font-sans antialiased">
     <!-- Title Section -->
-    <section class="pt-20 pb-4 px-4 bg-gray-50" id="info-section" ref="infoSection">
+    <section class="pt-10 pb-10 px-4 bg-gray-50" id="info-section" ref="infoSection">
       <h2
         class="text-3xl text-center font-bold text-gray opacity-0 transition-opacity duration-2000 ease-in-out delay-500"
         ref="title">
@@ -141,6 +141,148 @@ onMounted(() => {
   </div>
 </template>
 
+<<<<<<< HEAD
+=======
+<script lang="ts">
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
+
+interface Card {
+  title: string;
+  description: string;
+  imageUrl: string;
+  videoUrl: string;
+}
+
+export default defineComponent({
+  setup() {
+    const cardData: Card[] = [
+      {
+        title: "Feature One",
+        description: "Discover the amazing features we’ve introduced to enhance your experience.",
+        imageUrl: "https://via.placeholder.com/1280x720",
+        videoUrl: "",
+      },
+      {
+        title: "Feature Two",
+        description: "Stay informed with the latest updates. Our goal is to keep you in the loop.",
+        imageUrl: "",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      },
+      {
+        title: "Feature Three",
+        description: "We are always working on new features to improve your experience.",
+        imageUrl: "https://via.placeholder.com/1280x720",
+        videoUrl: "",
+      },
+      {
+        title: "Feature Four",
+        description: "A fresh and exciting way to interact with our platform, now better than ever.",
+        imageUrl: "",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      },
+      {
+        title: "Feature Five",
+        description: "The latest features make everything faster and easier to use.",
+        imageUrl: "https://via.placeholder.com/1280x720",
+        videoUrl: "",
+      },
+    ];
+
+
+    const limitedCardData = ref(
+      cardData.slice(0, 3).map(card => ({
+        ...card,
+        description: card.description.length > 50
+          ? card.description.substring(0, 50) + '...'
+          : card.description,
+      }))
+    );
+
+    const cardsContainer = ref<HTMLElement | null>(null);
+    const cards = ref<NodeListOf<HTMLElement> | null>(null);
+    const lastScroll = ref(0);
+    const viewportHeight = ref(window.innerHeight);
+
+    const infoSection = ref<HTMLElement | null>(null);
+    const title = ref<HTMLElement | null>(null);
+    const description = ref<HTMLElement | null>(null);
+
+    // Track button visibility based on scroll position
+    const showMoreButton = ref(false);
+
+
+    // Scroll animation logic
+    const animateCards = () => {
+      if (cards.value) {
+        cards.value.forEach((card) => {
+          const rect = card.getBoundingClientRect();
+          if (rect.top <= viewportHeight.value * 0.9 && rect.bottom >= viewportHeight.value * 0.1) {
+            card.classList.add('slide-in');
+            card.classList.remove('slide-out');
+          } else {
+            card.classList.add('slide-out');
+            card.classList.remove('slide-in');
+          }
+        });
+      }
+    };
+
+    // Track scroll direction (up or down)
+    const onScroll = () => {
+      const currentScroll = window.scrollY;
+
+      if (currentScroll > lastScroll.value) {
+        animateCards();
+        showMoreButton.value = true;
+      } else if (currentScroll < lastScroll.value) {
+        animateCards();
+        showMoreButton.value = false;
+      }
+
+      lastScroll.value = currentScroll;
+    };
+
+    onMounted(() => {
+      // Initialize cards and scroll event
+      cards.value = cardsContainer.value?.querySelectorAll('.card') || null;
+      window.addEventListener('scroll', onScroll);
+
+      // Intersection Observer for title section animation
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            title.value?.classList.add('opacity-100', 'text-gray-950');
+            description.value?.classList.add('opacity-100', 'text-gray-950');
+          } else {
+            title.value?.classList.remove('opacity-100', 'text-gray');
+            description.value?.classList.remove('opacity-100', 'text-gray');
+          }
+        });
+      }, { threshold: 0.5 });
+
+      if (infoSection.value) {
+        observer.observe(infoSection.value);
+      }
+    });
+
+    // Cleanup scroll event listener
+    onUnmounted(() => {
+      window.removeEventListener('scroll', onScroll);
+    });
+
+    return {
+      limitedCardData,
+      infoSection,
+      title,
+      description,
+      cardsContainer,
+      showMoreButton,
+    };
+  },
+});
+</script>
+
+>>>>>>> ecf34b96cf1b017f9f13fe6e6908e9bc42a89b6a
 <style scoped>
 /* Keyframes for sliding animation */
 @keyframes slideInFromLeft {
@@ -173,5 +315,27 @@ onMounted(() => {
 
 .card.slide-out {
   animation: slideOutToLeft 1s ease-out forwards;
+}
+
+/* Custom transitions for the "Show More" button */
+#show-more-btn {
+  transition: all 0.5s ease-in-out;
+}
+
+/* Specific visibility and transform classes for Show More button */
+#show-more-btn.opacity-0 {
+  opacity: 0;
+}
+
+#show-more-btn.opacity-100 {
+  opacity: 1;
+}
+
+#show-more-btn.translate-x-full {
+  transform: translateX(100%);
+}
+
+#show-more-btn.translate-x-0 {
+  transform: translateX(0);
 }
 </style>
