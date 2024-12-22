@@ -1,15 +1,18 @@
 <script setup lang="ts">
 // import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from './components/HelloWorld.vue'
-import AppAnnouncement from './components/AppAnnouncement.vue';
+import MainLayout from './layouts/MainLayout.vue';
 import AppHeader from './components/AppHeader.vue';
-import AppHeroSlider from './components/AppHeroSlider.vue';
+import SliderComponent from './components/SliderComponent.vue';
+import AppAnnouncement from './components/AppAnnouncement.vue';
 </script>
 
 <template>
-  <AppHeader />
-  <AppHeroSlider />
-  <AppAnnouncement />
+  <main-layout>
+    <AppHeader />
+    <SliderComponent />
+    <AppAnnouncement />
+  </main-layout>
+
   <!-- <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
